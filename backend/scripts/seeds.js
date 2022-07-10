@@ -9,6 +9,16 @@ async function seedDB() {
     const db = mongoose.connection;
     console.log("******* Connected correctly to server *******");
 	try {
+        collectionNames = await db.db.listCollections().toArray();
+        for (const collectionName of collectionNames) {
+            if (collectionName.name === "users") {
+                await db.db.dropCollection("users");
+            } else if (collectionName.name === "items") {
+                await db.db.dropCollection("items");
+            } else if (collectionName.name === "comments") {
+                await db.db.dropCollection("comments");
+            }
+        }
 		await seedUsers(db);
         await seedProducts(db);
         await seedComments(db);
@@ -22,7 +32,6 @@ seedDB();
 async function seedUsers(db) {
     require("../models/User");
     const User = await db.model("User");
-    await User.collection.drop();
     let usersData = [];
     for (let i = 0; i < 100; i++) {
         const user = new User();
@@ -40,7 +49,6 @@ async function seedProducts(db) {
     require("../models/User");
     const User = await db.model("User");
     const Product = await db.model("Item");
-    await Product.collection.drop();
     let productsData = [];
     const users = await User.find();
     for (const i in users) {
@@ -67,7 +75,6 @@ async function seedComments(db) {
     const User = await db.model("User");
     const Product = await db.model("Item");
     const Comment = await db.model("Comment");
-    await Comment.collection.drop();
     let commentsData = [];
     const users = await User.find();
     const products = await Product.find();
