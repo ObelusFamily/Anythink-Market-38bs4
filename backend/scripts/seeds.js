@@ -4,7 +4,7 @@ const { faker } = require('@faker-js/faker');
 const mongoose = require("mongoose");
 
 async function seedDB() {
-	const uri = "mongodb://localhost:27017/admin";
+	const uri = "mongodb://localhost:27017/anythink-market";
     await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     const db = mongoose.connection;
     console.log("******* Connected correctly to server *******");
